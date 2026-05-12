@@ -5,6 +5,7 @@ import (
 	"compress/gzip"
 	"encoding/base64"
 	"encoding/json"
+	"strings"
 	"testing"
 
 	corev1 "k8s.io/api/core/v1"
@@ -204,6 +205,10 @@ func TestExtractValues(t *testing.T) {
 		}
 		if result.RawValues == "" {
 			t.Error("RawValues should not be empty")
+		}
+		wantHeader := "# " + ResourceFinderCommentPrefix + "production/myapp\n"
+		if !strings.HasPrefix(result.RawValues, wantHeader) {
+			t.Errorf("RawValues should start with %q, got %q", wantHeader, result.RawValues)
 		}
 	})
 

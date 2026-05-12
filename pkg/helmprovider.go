@@ -80,6 +80,8 @@ func IsHelmSecret(secret *corev1.Secret) bool {
 	return true
 }
 
+const ResourceFinderCommentPrefix = "syngit.resource-finder/v1: "
+
 // ExtractValues decodes a Helm release secret and returns the user-supplied values.
 func ExtractValues(secret *corev1.Secret) (*HelmValues, error) {
 	if !IsHelmSecret(secret) {
@@ -105,10 +107,12 @@ func ExtractValues(secret *corev1.Secret) (*HelmValues, error) {
 		return nil, fmt.Errorf("failed to marshal values to YAML: %w", err)
 	}
 
+	rawValuesWithHeader := fmt.Sprintf("# %s%s/%s\n%s", ResourceFinderCommentPrefix, release.Namespace, release.Name, string(rawValues))
+
 	return &HelmValues{
 		Path:             release.Namespace + "/",
 		Name:             release.Name + "-values.yaml",
-		RawValues:        string(rawValues),
+		RawValues:        rawValuesWithHeader,
 		StructuredValues: release.Config,
 	}, nil
 }
