@@ -28,7 +28,7 @@ var helmSecretNameRegex = regexp.MustCompile(`^sh\.helm\.release\.v1\..+\.v\d+$`
 
 // HelmValues contains the extracted user-supplied values from a Helm release secret.
 type HelmValues struct {
-	Path             string
+	Namespace        string
 	Name             string
 	RawValues        string
 	StructuredValues map[string]interface{}
@@ -80,6 +80,10 @@ func IsHelmSecret(secret *corev1.Secret) bool {
 	return true
 }
 
+func IsHelmSecretByName(secretName string) bool {
+	return helmSecretNameRegex.MatchString(secretName)
+}
+
 const ResourceFinderCommentPrefix = "syngit.resource-finder/v1: "
 
 // ExtractValues decodes a Helm release secret and returns the user-supplied values.
@@ -110,8 +114,8 @@ func ExtractValues(secret *corev1.Secret) (*HelmValues, error) {
 	rawValuesWithHeader := fmt.Sprintf("# %s%s/%s\n%s", ResourceFinderCommentPrefix, release.Namespace, release.Name, string(rawValues))
 
 	return &HelmValues{
-		Path:             release.Namespace + "/",
-		Name:             release.Name + "-values.yaml",
+		Namespace:        release.Namespace,
+		Name:             release.Name,
 		RawValues:        rawValuesWithHeader,
 		StructuredValues: release.Config,
 	}, nil
