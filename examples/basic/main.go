@@ -31,7 +31,7 @@ func main() {
 		log.Fatalf("failed to extract values: %v", err)
 	}
 
-	fmt.Printf("Path:   %s\n", values.Path)
+	fmt.Printf("Namespace:   %s\n", values.Namespace)
 	fmt.Printf("Name:   %s\n", values.Name)
 	fmt.Printf("Values:\n%s\n", values.RawValues)
 }

@@ -187,11 +187,11 @@ func TestExtractValues(t *testing.T) {
 			t.Fatalf("ExtractValues() error = %v", err)
 		}
 
-		if result.Path != "production/" {
-			t.Errorf("Path = %q, want %q", result.Path, "production/")
+		if result.Namespace != "production" {
+			t.Errorf("Namespace = %q, want %q", result.Namespace, "production")
 		}
-		if result.Name != "myapp-values.yaml" {
-			t.Errorf("Name = %q, want %q", result.Name, "myapp-values.yaml")
+		if result.Name != "myapp" {
+			t.Errorf("Name = %q, want %q", result.Name, "myapp")
 		}
 		if result.StructuredValues["replicaCount"] != float64(3) {
 			t.Errorf("StructuredValues[replicaCount] = %v, want 3", result.StructuredValues["replicaCount"])
@@ -219,11 +219,11 @@ func TestExtractValues(t *testing.T) {
 			t.Fatalf("ExtractValues() error = %v", err)
 		}
 
-		if result.Path != "default/" {
-			t.Errorf("Path = %q, want %q", result.Path, "default/")
+		if result.Namespace != "default" {
+			t.Errorf("Namespace = %q, want %q", result.Namespace, "default")
 		}
-		if result.Name != "emptyapp-values.yaml" {
-			t.Errorf("Name = %q, want %q", result.Name, "emptyapp-values.yaml")
+		if result.Name != "emptyapp" {
+			t.Errorf("Name = %q, want %q", result.Name, "emptyapp")
 		}
 		if len(result.StructuredValues) != 0 {
 			t.Errorf("StructuredValues should be empty, got %v", result.StructuredValues)
